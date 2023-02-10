@@ -1,0 +1,41 @@
+---
+nats_version: '2.9.11'
+nats_user: 'nats'
+nats_group: 'nats'
+nats_service: 'nats-server'
+nats_force_restart: false # reload doesn't work for all changes
+nats_host: '0.0.0.0'
+nats_port: 4222
+nats_port_http: 8222
+
+nats_log_enabled: true
+nats_log_dir: '/var/log/{{ nats_service }}'
+nats_log_file: 'nats.log'
+nats_log_rotate: 7
+nats_log_debug: false
+
+nats_max_payload: '1MB'
+
+nats_auth_type: 'none' # none,token,password
+nats_auth_token: 'secret'
+nats_users: {}
+nats_default_permissions: {}
+nats_sys_account_user: ''
+nats_no_auth_user: ''
+
+nats_cluster_host_group: 'nats' # enable cluster if there are nodes in this group
+nats_cluster_address: "{{ ansible_default_ipv4.address }}"
+nats_cluster_port: 6222
+nats_cluster_user: 'cluster'
+nats_cluster_password: 'password'
+nats_cluster_gateway_host_groups: []
+nats_cluster_gateway_port: 7222
+nats_cluster_gateway_user: 'gateway'
+nats_cluster_gateway_password: 'password'
+
+nats_leaf_node_port: 7422
+nats_leaf_node_listen_enabled: false
+nats_leaf_node_remotes: [] # enable leaf node if not empty
+
+nats_cli_install: true
+nats_cli_version: '0.0.35'

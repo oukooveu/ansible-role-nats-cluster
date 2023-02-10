@@ -1,0 +1,78 @@
+---
+- name: server | install package (debian)
+  ansible.builtin.apt:
+    deb: "https://github.com/nats-io/nats-server/releases/download/v{{ nats_version }}/nats-server-v{{ nats_version }}-amd64.deb"
+    state: present
+  notify: restart nats service
+  when: ansible_os_family == "Debian"
+
+- name: server | install package (redhat)
+  ansible.builtin.apt:
+    name: "https://github.com/nats-io/nats-server/releases/download/v{{ nats_version }}/nats-server-v{{ nats_version }}-amd64.rpm"
+    state: present
+  notify: restart nats service
+  when: ansible_os_family == "RedHat"
+
+- name: server | create group
+  ansible.builtin.group:
+    name: "{{ nats_group }}"
+    state: present
+
+- name: server | create user
+  ansible.builtin.user:
+    name: "{{ nats_user }}"
+    comment: "nats server user"
+    group: "{{ nats_group }}"
+    password: '!'
+    shell: '/usr/sbin/nologin'
+
+- name: server | create log directory
+  ansible.builtin.file:
+    path: "{{ nats_log_dir }}"
+    state: directory
+    owner: "{{ nats_user }}"
+    group: "{{ nats_group }}"
+    mode: '755'
+  when: nats_log_enabled|bool
+
+- name: server | configure logrotate
+  ansible.builtin.template:
+    src: logrotate.conf.j2
+    dest: "/etc/logrotate.d/{{ nats_service }}"
+    mode: "0644"
+  when: nats_log_enabled|bool
+
+- name: "server | configure systemd service {{ nats_service }}"
+  ansible.builtin.template:
+    src: nats.service.j2
+    dest: "/etc/systemd/system/{{ nats_service }}.service"
+    mode: "0644"
+  notify: restart nats service
+
+- name: server | set accounts and users facts
+  ansible.builtin.set_fact:
+    __nats_users_authorization: "{{ nats_users | dict2items | selectattr('value.account', 'undefined') | list }}"
+    __nats_accounts: "{{ nats_users.values() | selectattr('account', 'defined') | map(attribute='account') | unique | list }}"
+    __nats_users_accounts: "{{ nats_users | dict2items | selectattr('value.account', 'defined') | list }}"
+
+- name: server | configure nats server
+  ansible.builtin.template:
+    src: "nats.conf.j2"
+    dest: "/etc/{{ nats_service }}.conf"
+    owner: "{{ nats_user }}"
+    group: "{{ nats_group }}"
+    mode: "0640"
+  notify: restart nats service # it's not clear what settings can be reloaded so restart
+
+- name: "server | enable and start service {{ nats_service }}"
+  ansible.builtin.service:
+    name: "{{ nats_service }}"
+    state: started
+    enabled: true
+
+- name: server | restart nats service (force)
+  ansible.builtin.debug:
+    msg: "force restart for is triggered {{ nats_service }}"
+  changed_when: true
+  notify: restart nats service
+  when: nats_force_restart|bool

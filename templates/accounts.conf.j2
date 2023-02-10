@@ -1,0 +1,30 @@
+{% if __nats_accounts|length > 0 %}
+accounts: {
+{%   for account in __nats_accounts %}
+    {{ account }}: {
+      users = [
+{%     for user in __nats_users_accounts|selectattr('value.account','equalto',account)|list %}
+        {
+          user: '{{ user.key }}'
+          password: '{{ user.value.password }}'
+{%       if 'permissions' in user.value %}
+          permissions: {
+{%         if user['value']['permissions'].get('publish',[])|length > 0 %}
+            publish: [{{ user['value']['permissions']['publish']|map('quote')|join(',') }}]
+{%         endif %}
+{%         if user['value']['permissions'].get('subscribe',[])|length > 0 %}
+            subscribe: [{{ user['value']['permissions']['subscribe']|map('quote')|join(',') }}]
+{%         endif %}
+            }
+{%       endif %}
+        }
+{%     endfor %}
+      ]
+    }
+{%   endfor %}
+{% endif %}
+}
+
+{% if nats_sys_account_user in nats_users and nats_users[nats_sys_account_user].get('account')|length > 0 %}
+system_account: {{ nats_users[nats_sys_account_user]['account'] }}
+{% endif %}

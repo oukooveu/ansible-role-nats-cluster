@@ -1,0 +1,39 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+host: {{ nats_host }}
+port: {{ nats_port }}
+http: {{ nats_port_http }}
+
+server_name: {{ ansible_fqdn }}
+
+max_payload: {{ nats_max_payload }}
+
+{% if nats_log_enabled|bool %}
+log_file: "{{ nats_log_dir }}/{{ nats_log_file }}"
+debug: {{ nats_log_debug|lower }}
+{% endif %}
+
+{% include 'auth.conf.j2' %}
+
+{% include 'accounts.conf.j2' %}
+
+{% if nats_no_auth_user|length > 0 %}
+no_auth_user: '{{ nats_no_auth_user }}'
+{% endif %}
+
+{% if inventory_hostname in groups.get(nats_cluster_host_group,[]) %}
+{% include 'cluster.conf.j2' %}
+{% endif %}
+
+{% if nats_leaf_node_listen_enabled|bool %}
+leafnodes {
+  port: {{ nats_leaf_node_port }}
+}
+{% elif nats_leaf_node_remotes|length > 0 %}
+leafnodes {
+  remotes: [
+    {% for remote in nats_leaf_node_remotes %}
+    { url: nats://{{ remote }}:{{ nats_leaf_node_port }} }
+    {% endfor %}
+  ]
+}
+{% endif %}

@@ -1,0 +1,39 @@
+{% if nats_auth_type == 'token' %}
+authorization: {
+    token: "{{ nats_auth_token }}"
+}
+{% endif %}
+{% if nats_auth_type == 'password' %}
+authorization: {
+{%   if nats_default_permissions|length > 0 %}
+    default_permissions = {
+{%    if nats_default_permissions.get('publish',[])|length > 0 %}
+        publish = [{{ nats_default_permissions.publish|map('quote')|join(',') }}]
+{%    endif %}
+{%    if nats_default_permissions.get('subscribe',[])|length > 0 %}
+        subscribe = [{{ nats_default_permissions.subscribe|map('quote')|join(',') }}]
+{%    endif %}
+    }
+{%   endif %}
+{%   if __nats_users_authorization|length > 0 %}
+    users = [
+{%     for user in __nats_users_authorization %}
+        {
+            user: '{{ user.key }}'
+            password: '{{ user.value.password }}'
+{%       if 'permissions' in user.value %}
+            permissions: {
+{%         if user['value']['permissions'].get('publish',[])|length > 0 %}
+                publish: [{{ user['value']['permissions']['publish']|map('quote')|join(',') }}]
+{%         endif %}
+{%         if user['value']['permissions'].get('subscribe',[])|length > 0 %}
+                subscribe: [{{ user['value']['permissions']['subscribe']|map('quote')|join(',') }}]
+{%         endif %}
+            }
+{%       endif %}
+        }
+{%     endfor %}
+    ]
+{%   endif %}
+}
+{% endif %}

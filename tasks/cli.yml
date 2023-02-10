@@ -1,0 +1,12 @@
+---
+- name: cli | install package (debian)
+  ansible.builtin.apt:
+    state: present
+    deb: "https://github.com/nats-io/natscli/releases/download/v{{ nats_cli_version }}/nats-{{ nats_cli_version }}-amd64.deb"
+  when: ansible_os_family == "Debian"
+
+- name: cli | install package (redhat)
+  ansible.builtin.apt:
+    name: "https://github.com/nats-io/natscli/releases/download/v{{ nats_cli_version }}/nats-v{{ nats_cli_version }}-amd64.rpm"
+    state: present
+  when: ansible_os_family == "RedHat"

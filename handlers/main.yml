@@ -1,0 +1,13 @@
+---
+- name: restart nats service
+  ansible.builtin.systemd:
+    name: "{{ nats_service }}"
+    state: restarted
+    daemon_reload: yes
+  register: restarted
+
+- name: reload nats service
+  ansible.builtin.service:
+    name: "{{ nats_service }}"
+    state: reloaded
+  when: restarted is not defined

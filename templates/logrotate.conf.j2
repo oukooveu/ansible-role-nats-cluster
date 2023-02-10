@@ -1,0 +1,10 @@
+{{ nats_log_dir }}/{{ nats_log_file }} {
+    daily
+    rotate {{ nats_log_rotate }}
+    compress
+    missingok
+    notifempty
+    postrotate
+        systemctl kill -SIGUSR1 {{ nats_service }}
+    endscript
+}

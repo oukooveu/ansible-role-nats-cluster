@@ -1,0 +1,10 @@
+---
+- name: main | validate configuration
+  ansible.builtin.include_tasks: "validate.yml"
+
+- name: main | install server
+  ansible.builtin.include_tasks: "server.yml"
+
+- name: main | install cli
+  ansible.builtin.include_tasks: "cli.yml"
+  when: nats_cli_install|bool

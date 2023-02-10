@@ -1,0 +1,31 @@
+---
+- name: validate | nats_no_auth_user
+  ansible.builtin.assert:
+    that:
+      - nats_no_auth_user in nats_users.keys()|list
+    msg: "{{ nats_no_auth_user }} should exist in nats_users"
+  when: nats_no_auth_user|length > 0
+
+- name: validate | token auth
+  ansible.builtin.assert:
+    that:
+      - nats_leaf_node_listen_enabled|bool == 0
+      - nats_cluster_gateway_host_groups|length == 0
+    msg: 'gateway or leaf node requires system account which mutual exclusive with token authentication'
+  when: nats_auth_type == 'token'
+
+- name: validate | nats cluster
+  ansible.builtin.assert:
+    that:
+      - nats_leaf_node_remotes|length == 0
+    msg: 'cluster and leaf node configurations are mutual exclusive'
+  when:
+    - nats_cluster_host_group in groups
+    - groups[nats_cluster_host_group]|length > 0
+
+- name: validate | leaf node remotes
+  ansible.builtin.assert:
+    that:
+      - not nats_leaf_node_listen_enabled|bool
+    msg: 'leaf node can not listen for leaf connections'
+  when: nats_leaf_node_remotes|length > 0

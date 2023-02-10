@@ -1,0 +1,57 @@
+cluster: {
+  name: {{ nats_cluster_host_group }}
+  host: {{ nats_cluster_address }}
+  port: {{ nats_cluster_port }}
+{% if nats_auth_type == 'password' %}
+  authorization: {
+    user: "{{ nats_cluster_user }}"
+    password: "{{ nats_cluster_password }}"
+  }
+{% endif %}
+    routes = [
+{% for host in groups[nats_cluster_host_group] %}
+{%   set route = hostvars[host]['nats_cluster_address'] | d(hostvars[host]['ansible_default_ipv4']['address']) %}
+{%   if nats_auth_type == 'none' %}
+      nats-route://{{ route }}:{{ nats_cluster_port }}
+{%   elif nats_auth_type == 'token' %}
+      nats-route://{{ nats_auth_token }}@{{ route }}:{{ nats_cluster_port }}
+{%   elif nats_auth_type == 'password' %}
+      nats-route://{{ nats_cluster_user }}:{{ nats_cluster_password }}@{{ route }}:{{ nats_cluster_port }}
+{%   endif %}
+{% endfor %}
+  ]
+}
+
+{% if nats_cluster_gateway_host_groups|length > 0 %}
+gateway {
+  name: {{ nats_cluster_host_group }}
+  host: {{ nats_cluster_address }}
+  port: {{ nats_cluster_gateway_port }}
+{%   if nats_auth_type == 'password' %}
+  authorization: {
+    user: "{{ nats_cluster_gateway_user }}"
+    password: "{{ nats_cluster_gateway_password }}"
+  }
+{%   endif %}
+  gateways: [
+{%   for group in nats_cluster_gateway_host_groups %}
+    {
+      name: {{ group }}
+      urls: [
+{%     for host in groups[group] %}
+{%       set route = hostvars[host]['nats_cluster_address'] | d(hostvars[host]['ansible_default_ipv4']['address']) %}
+{%       if nats_auth_type == 'none' %}
+        nats://{{ route }}:{{ nats_cluster_gateway_port }}
+{%       elif nats_auth_type == 'token' %}
+        nats://{{ nats_auth_token }}@{{ route }}:{{ nats_cluster_gateway_port }}
+{%       elif nats_auth_type == 'password' %}
+        nats://{{ nats_cluster_gateway_user }}:{{ nats_cluster_gateway_password }}@{{ route }}:{{ nats_cluster_gateway_port }}
+{%       endif %}
+{%     endfor %}
+      ]
+    }
+{%   endfor %}
+  ]
+}
+{% endif %}
+
