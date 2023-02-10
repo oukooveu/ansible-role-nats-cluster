@@ -7,8 +7,9 @@
   when: ansible_os_family == "Debian"
 
 - name: server | install package (redhat)
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: "https://github.com/nats-io/nats-server/releases/download/v{{ nats_version }}/nats-server-v{{ nats_version }}-amd64.rpm"
+    disable_gpg_check: true
     state: present
   notify: restart nats service
   when: ansible_os_family == "RedHat"

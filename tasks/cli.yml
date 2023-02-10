@@ -6,7 +6,8 @@
   when: ansible_os_family == "Debian"
 
 - name: cli | install package (redhat)
-  ansible.builtin.apt:
-    name: "https://github.com/nats-io/natscli/releases/download/v{{ nats_cli_version }}/nats-v{{ nats_cli_version }}-amd64.rpm"
+  ansible.builtin.dnf:
+    name: "https://github.com/nats-io/natscli/releases/download/v{{ nats_cli_version }}/nats-{{ nats_cli_version }}-amd64.rpm"
+    disable_gpg_check: true
     state: present
   when: ansible_os_family == "RedHat"
