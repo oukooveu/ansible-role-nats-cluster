@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: nats_cluster
+  namespace: oukooveu
+  author: Daniil Kupchenko
+  description: Role for NATS cluster
+  license: Apache-2.0
+  min_ansible_version: "7.1.0"
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Debian
+      versions:
+        - buster    # 10
+        - bullseye  # 11
+  galaxy_tags:
+    - nats
+    - messaging
+    - cluster
+dependencies: []
