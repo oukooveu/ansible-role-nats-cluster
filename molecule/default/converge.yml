@@ -31,4 +31,4 @@
         password: b
 
   roles:
-    - role: oukooveu.nats_server
+    - role: oukooveu.nats_cluster
