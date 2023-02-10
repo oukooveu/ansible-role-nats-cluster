@@ -1,0 +1,81 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+  flake8
+platforms:
+  - name: node11
+    image: ${MOLECULE_IMAGE:-debian:10}
+    command: /sbin/init
+    systemd: true
+    network: molecule-nats
+    groups:
+      - dc1
+  - name: node12
+    image: ${MOLECULE_IMAGE:-debian:10}
+    command: /sbin/init
+    systemd: true
+    network: molecule-nats
+    groups:
+      - dc1
+  - name: node21
+    image: ${MOLECULE_IMAGE:-debian:10}
+    command: /sbin/init
+    systemd: true
+    network: molecule-nats
+    groups:
+      - dc2
+  - name: node22
+    image: ${MOLECULE_IMAGE:-debian:10}
+    command: /sbin/init
+    systemd: true
+    network: molecule-nats
+    groups:
+      - dc2
+  - name: node31
+    image: ${MOLECULE_IMAGE:-debian:10}
+    command: /sbin/init
+    systemd: true
+    network: molecule-nats
+    groups:
+      - dc3
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - -D
+  config_options:
+    defaults:
+      any_errors_fatal: true
+      callbacks_enabled: ansible.posix.profile_tasks
+  inventory:
+    host_vars:
+      node22:
+        nats_leaf_node_listen_enabled: true
+    group_vars:
+      dc1:
+        nats_cluster_host_group: dc1
+        nats_cluster_user: user1
+        nats_cluster_password: secret1
+        nats_cluster_gateway_host_groups:
+          - dc2
+      dc2:
+        nats_cluster_host_group: dc2
+        nats_cluster_user: user2
+        nats_cluster_password: secret2
+        nats_cluster_gateway_host_groups:
+          - dc1
+      dc3:
+        nats_leaf_node_remotes:
+          - node22
+verifier:
+  name: testinfra
+  enabled: true
+  options:
+    p: 'no:pytest-ansible'
+    v: true

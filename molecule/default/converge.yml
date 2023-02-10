@@ -1,0 +1,34 @@
+---
+- name: converge
+  hosts: all
+  vars:
+    nats_auth_type: 'password'
+    nats_sys_account_user: 'admin'
+    nats_default_permissions:
+      publish:
+        - "SANDBOX.*"
+      subscribe:
+        - "PUBLIC.>"
+        - "_INBOX.>"
+    nats_users:
+      read:
+        password: read
+      write:
+        password: write
+        permissions:
+          publish: ["PUBLIC.*"]
+      admin:
+        account: SYS
+        password: password
+      a:
+        account: A
+        password: a
+        permissions:
+          subscribe: [">"]
+          publish: [">"]
+      b:
+        account: B
+        password: b
+
+  roles:
+    - role: oukooveu.nats_server
