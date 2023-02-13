@@ -39,9 +39,13 @@ HTTP port for server monitoring. Default value: `8222`.
 
 Enable logging. Default value: `true`
 
+### nats_log_dir
+
+Logs directory. Default value: `/var/log/nats`
+
 ### nats_log_file
 
-Log file path. Default value: `/var/log/nats.log`.
+Log file path. Default value: `nats-server.log`.
 
 ### nats_log_rotate
 

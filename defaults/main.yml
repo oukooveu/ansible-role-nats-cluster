@@ -8,7 +8,8 @@ nats_port: 4222
 nats_port_http: 8222
 
 nats_log_enabled: true
-nats_log_file: '/var/log/nats.log'
+nats_log_dir: '/var/log/nats'
+nats_log_file: 'nats-server.log'
 nats_log_rotate: 7
 nats_log_debug: false
 

@@ -27,13 +27,13 @@
     password: '!'
     shell: '/usr/sbin/nologin'
 
-- name: server | configure log path
+- name: server | configure log dir
   ansible.builtin.file:
-    path: "{{ nats_log_file }}"
-    state: touch
+    path: "{{ nats_log_dir }}"
+    state: directory
     owner: "{{ nats_user }}"
     group: "{{ nats_group }}"
-    mode: '640'
+    mode: '750'
   when: nats_log_enabled|bool
 
 - name: server | configure logrotate
