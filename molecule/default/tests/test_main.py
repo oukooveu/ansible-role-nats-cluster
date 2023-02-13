@@ -24,3 +24,9 @@ def test_publish(host):
 def test_system_account(host):
     cmd = host.run("/usr/local/bin/nats -s nats://admin:password@localhost server ls --json")
     assert cmd.succeeded
+
+
+def test_exporter_service(host):
+    service = host.service('nats-exporter')
+    assert service.is_running
+    assert service.is_enabled

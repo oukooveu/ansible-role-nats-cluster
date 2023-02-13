@@ -2,6 +2,8 @@
 - name: converge
   hosts: all
   vars:
+    nats_cli_enabled: true
+    nats_exporter_enabled: true
     nats_auth_type: 'password'
     nats_sys_account_user: 'admin'
     nats_default_permissions:

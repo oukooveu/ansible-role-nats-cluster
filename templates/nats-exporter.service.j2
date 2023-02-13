@@ -1,0 +1,15 @@
+[Unit]
+Description="Prometheus NATS Exporter"
+After=network.target nats-server.service
+
+[Service]
+Type=simple
+RestartSec=5s
+Restart=on-failure
+User={{ nats_user }}
+Group={{ nats_group }}
+ExecStop=/bin/kill -s SIGINT $MAINPID
+ExecStart=/usr/bin/prometheus-nats-exporter {{ nats_exporter_options }} http://{{ nats_host }}:{{ nats_port_http }}
+
+[Install]
+WantedBy=multi-user.target

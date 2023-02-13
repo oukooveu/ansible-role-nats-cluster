@@ -11,3 +11,10 @@
     name: "{{ nats_service }}"
     state: reloaded
   when: restarted is not defined
+
+- name: restart nats-exporter service
+  ansible.builtin.systemd:
+    name: nats-exporter
+    state: restarted
+    daemon_reload: yes
+  register: restarted

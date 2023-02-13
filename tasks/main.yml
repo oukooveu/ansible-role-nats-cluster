@@ -7,4 +7,8 @@
 
 - name: main | install cli
   ansible.builtin.include_tasks: "cli.yml"
-  when: nats_cli_install|bool
+  when: nats_cli_enabled|bool
+
+- name: main | install prometheus exporter
+  ansible.builtin.include_tasks: "exporter.yml"
+  when: nats_exporter_enabled|bool

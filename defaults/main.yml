@@ -37,5 +37,9 @@ nats_leaf_node_port: 7422
 nats_leaf_node_listen_enabled: false
 nats_leaf_node_remotes: [] # enable leaf node if not empty
 
-nats_cli_install: true
+nats_cli_enabled: false
 nats_cli_version: '0.0.35'
+
+nats_exporter_enabled: false
+nats_exporter_version: '0.10.1'
+nats_exporter_options: '-port 7777 -channelz -connz -routez -serverz -subz -varz'
