@@ -27,26 +27,26 @@
     password: '!'
     shell: '/usr/sbin/nologin'
 
-- name: server | create log directory
+- name: server | configure log path
   ansible.builtin.file:
-    path: "{{ nats_log_dir }}"
-    state: directory
+    path: "{{ nats_log_file }}"
+    state: touch
     owner: "{{ nats_user }}"
     group: "{{ nats_group }}"
-    mode: '755'
+    mode: '640'
   when: nats_log_enabled|bool
 
 - name: server | configure logrotate
   ansible.builtin.template:
     src: logrotate.conf.j2
-    dest: "/etc/logrotate.d/{{ nats_service }}"
+    dest: "/etc/logrotate.d/nats-server"
     mode: "0644"
   when: nats_log_enabled|bool
 
-- name: "server | configure systemd service {{ nats_service }}"
+- name: "server | configure nats systemd service"
   ansible.builtin.template:
     src: nats.service.j2
-    dest: "/etc/systemd/system/{{ nats_service }}.service"
+    dest: "/etc/systemd/system/nats-server.service"
     mode: "0644"
   notify: restart nats service
 
@@ -59,21 +59,21 @@
 - name: server | configure nats server
   ansible.builtin.template:
     src: "nats.conf.j2"
-    dest: "/etc/{{ nats_service }}.conf"
+    dest: "/etc/nats-server.conf"
     owner: "{{ nats_user }}"
     group: "{{ nats_group }}"
     mode: "0640"
   notify: restart nats service # it's not clear what settings can be reloaded so restart
 
-- name: "server | enable and start service {{ nats_service }}"
+- name: "server | enable and start nats service"
   ansible.builtin.service:
-    name: "{{ nats_service }}"
+    name: nats-server
     state: started
     enabled: true
 
 - name: server | restart nats service (force)
   ansible.builtin.debug:
-    msg: "force restart for is triggered {{ nats_service }}"
+    msg: "force restart for nats server is triggered"
   changed_when: true
   notify: restart nats service
   when: nats_force_restart|bool

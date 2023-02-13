@@ -23,10 +23,6 @@ Version of NATS server. Default value: `2.9.11`.
 
 System user and group to run NATS server. Default value: `nats:nats`.
 
-### nats_service
-
-NATS system service name. Multiple services with different names can be configured on one host (but different playbooks are required). Default value: `nats-server`.
-
 ### nats_host
 
 Host for client connections. Default value: `0.0.0.0`.
@@ -43,13 +39,9 @@ HTTP port for server monitoring. Default value: `8222`.
 
 Enable logging. Default value: `true`
 
-### nats_log_dir
-
-Logs directory. Default value: `/var/log/{{ nats_service }}`
-
 ### nats_log_file
 
-Log file name. Default value: `nats.log`.
+Log file path. Default value: `/var/log/nats.log`.
 
 ### nats_log_rotate
 
