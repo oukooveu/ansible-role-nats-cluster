@@ -6,10 +6,15 @@
   when: ansible_os_family == "Debian"
 
 - name: exporter | install package (redhat)
-  ansible.builtin.dnf:
-    name: "https://github.com/nats-io/prometheus-nats-exporter/releases/download/v{{ nats_exporter_version }}/prometheus-nats-exporter-v{{ nats_exporter_version }}-amd64.rpm"
-    disable_gpg_check: true
-    state: present
+  ansible.builtin.include_tasks: install_archive.yml
+  vars:
+    archive_url: "https://github.com/nats-io/prometheus-nats-exporter/releases/download/v{{ nats_exporter_version }}"
+    archive_name: "prometheus-nats-exporter-v{{ nats_exporter_version }}-linux-amd64.tar.gz"
+    archive_checksum: "prometheus-nats-exporter-v{{ nats_exporter_version }}-checksums.txt"
+    archive_dest: '/opt/nats/releases'
+    archive_extract_dest: '/usr/bin'
+    archive_extract_files:
+      - "prometheus-nats-exporter-v{{ nats_exporter_version }}-linux-amd64/prometheus-nats-exporter"
   when: ansible_os_family == "RedHat"
 
 - name: "exporter | configure systemd nats-exporter service"
