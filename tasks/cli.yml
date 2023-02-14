@@ -3,6 +3,10 @@
   ansible.builtin.apt:
     state: present
     deb: "https://github.com/nats-io/natscli/releases/download/v{{ nats_cli_version }}/nats-{{ nats_cli_version }}-amd64.deb"
+  register: install_cli
+  until: install_cli is succeeded
+  retries: 3
+  delay: 5
   when: ansible_os_family == "Debian"
 
 - name: cli | install package (redhat)
@@ -10,4 +14,8 @@
     name: "https://github.com/nats-io/natscli/releases/download/v{{ nats_cli_version }}/nats-{{ nats_cli_version }}-amd64.rpm"
     disable_gpg_check: true
     state: present
+  register: install_cli
+  until: install_cli is succeeded
+  retries: 3
+  delay: 5
   when: ansible_os_family == "RedHat"

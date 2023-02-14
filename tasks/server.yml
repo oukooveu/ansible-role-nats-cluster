@@ -3,6 +3,10 @@
   ansible.builtin.apt:
     deb: "https://github.com/nats-io/nats-server/releases/download/v{{ nats_version }}/nats-server-v{{ nats_version }}-amd64.deb"
     state: present
+  register: install_server
+  until: install_server is succeeded
+  retries: 3
+  delay: 5
   notify: restart nats service
   when: ansible_os_family == "Debian"
 
@@ -11,6 +15,10 @@
     name: "https://github.com/nats-io/nats-server/releases/download/v{{ nats_version }}/nats-server-v{{ nats_version }}-amd64.rpm"
     disable_gpg_check: true
     state: present
+  register: install_server
+  until: install_server is succeeded
+  retries: 3
+  delay: 5
   notify: restart nats service
   when: ansible_os_family == "RedHat"
 
