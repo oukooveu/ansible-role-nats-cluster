@@ -6,6 +6,7 @@ nats_force_restart: false # reload doesn't work for all changes
 nats_host: '0.0.0.0'
 nats_port: 4222
 nats_port_http: 8222
+nats_server_name: "{{ ansible_fqdn }}"
 
 nats_log_enabled: true
 nats_log_dir: '/var/log/nats'

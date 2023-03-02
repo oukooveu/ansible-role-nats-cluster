@@ -23,6 +23,7 @@ There are no special requirements.
 | nats_host| Host for client connections | `0.0.0.0` |
 | nats_port | Port for client connections | `4222` |
 | nats_port_http | HTTP port for server monitoring | `8222` |
+| nats_server_name | NATS server name | `{{ ansible_fqdn }}` |
 | nats_log_enabled | Enable logging | `true` |
 | nats_log_dir | Logs directory | `/var/log/nats` |
 | nats_log_file | Log file path | `nats-server.log` |
@@ -36,7 +37,7 @@ There are no special requirements.
 | nats_sys_account_user| Special user to manage [system events](https://docs.nats.io/running-a-nats-service/configuration/sys_accounts#local-configuration) (`nats server` commands family requires it to be defined). This user should be defined in `nats_users` dictionary (see above) and has configured account | N/A |
 | nats_no_auth_user | Which user is used for connections without any authentication. It's potential security breach and should be used carefully | N/A |
 | nats_cluster_host_group | Ansible host group name contains hosts from NATS cluster. This provides ability to configure several clusters in one play (see molecule tests as a reference) | `nats` |
-| nats_cluster_address | Interface where the host will listen for incoming route connections | `ansible_default_ipv4.address` |
+| nats_cluster_address | Interface where the host will listen for incoming route connections | `{{ ansible_default_ipv4.address }}` |
 | nats_cluster_port | Port where the host will listen for incoming route connections | `6222` |
 | nats_cluster_user | Username to establish connections between hosts in the cluster | `cluster` |
 | nats_cluster_password | Password to establish connections between hosts in the cluster | `password` |
