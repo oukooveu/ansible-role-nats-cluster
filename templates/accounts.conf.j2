@@ -22,8 +22,8 @@ accounts: {
       ]
     }
 {%   endfor %}
-{% endif %}
 }
+{% endif %}
 
 {% if nats_sys_account_user in nats_users and nats_users[nats_sys_account_user].get('account')|length > 0 %}
 system_account: {{ nats_users[nats_sys_account_user]['account'] }}
