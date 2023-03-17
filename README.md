@@ -56,7 +56,9 @@ There are no special requirements.
 
 ### nats_auth_type
 
-Token and password authentications are mutually exclusive and when `nats_auth_type=token` users and accounts related configuration (see below) doesn't make sense. This doesn't apply to cluster and gateway authentication (user and password can be used there).
+Token and password authentications are mutually exclusive and when `nats_auth_type=token` users and accounts related configuration (`nats_users` dictionary and all cluster/gateway user and password variables) doesn't make sense.
+
+When `nats_auth_type=password` it's not required to provide `nats_users` but cluster/gateway related variables have defaults so it's authentication will be enabled.
 
 ### nats_users
 
