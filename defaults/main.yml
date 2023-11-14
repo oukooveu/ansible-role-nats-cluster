@@ -43,3 +43,8 @@ nats_cli_version: '0.0.35'
 nats_exporter_enabled: false
 nats_exporter_version: '0.10.1'
 nats_exporter_options: '-port 7777 -channelz -connz -routez -serverz -subz -varz'
+
+nats_jetstream_enabled: false
+nats_jetstream_storage_dir: '/var/lib/nats/data'
+nats_jetstream_max_memory: '2G'
+nats_jetstream_max_storage_file_size: '10G'
