@@ -1,4 +1,7 @@
 ---
 skip_list:
   - name[casing]
-  - no-handler
+
+exclude_paths:
+  - .venv
+  - .vscode

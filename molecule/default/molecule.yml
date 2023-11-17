@@ -3,42 +3,37 @@ dependency:
   name: galaxy
 driver:
   name: podman
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
-  flake8
 platforms:
   - name: node11
-    image: ${MOLECULE_IMAGE:-debian:10}
+    image: ${MOLECULE_IMAGE:-debian:11}
     command: /sbin/init
     systemd: true
     network: molecule-nats
     groups:
       - dc1
   - name: node12
-    image: ${MOLECULE_IMAGE:-debian:10}
+    image: ${MOLECULE_IMAGE:-debian:11}
     command: /sbin/init
     systemd: true
     network: molecule-nats
     groups:
       - dc1
   - name: node21
-    image: ${MOLECULE_IMAGE:-debian:10}
+    image: ${MOLECULE_IMAGE:-debian:11}
     command: /sbin/init
     systemd: true
     network: molecule-nats
     groups:
       - dc2
   - name: node22
-    image: ${MOLECULE_IMAGE:-debian:10}
+    image: ${MOLECULE_IMAGE:-debian:11}
     command: /sbin/init
     systemd: true
     network: molecule-nats
     groups:
       - dc2
   - name: node31
-    image: ${MOLECULE_IMAGE:-debian:10}
+    image: ${MOLECULE_IMAGE:-debian:11}
     command: /sbin/init
     systemd: true
     network: molecule-nats
