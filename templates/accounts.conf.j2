@@ -20,11 +20,6 @@ accounts: {
         }
 {%     endfor %}
       ]
-
-{% if nats_jetstream_enabled|bool %}
-    jetstream: enabled
-{% endif %}
-
     }
 {%   endfor %}
 }
