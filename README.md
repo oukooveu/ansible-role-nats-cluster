@@ -53,9 +53,9 @@ There are no special requirements.
 | nats_exporter_enabled | Installs NATS Prometheus exporter | `false` |
 | nats_exporter_version | NATS Prometheus exporter version | `0.10.1` |
 | nats_exporter_options | NATS Prometheus exporter command line options | `-port 7777 -channelz -connz -routez -serverz -subz -varz` |
-| nats_jetstream_enabled | Enable jetstream on the installation       | `false` |
+| nats_jetstream_enabled | Enable jetstream on the installation, this option is a global setting affecting all accounts       | `false` |
 | nats_jetstream_storage_dir | Directory utilized to store jetstream data       | `/var/lib/nats/data` |
-| nats_jetstream_max_memory | Maximum amount of memory to commit to jetstream. Change this appropriately depending on your system capabilities   | `2G` |
+| nats_jetstream_max_memory | Maximum amount of memory to commit to jetstream. Change this appropriately depending on your system capabilities  | `2G` |
 | nats_jetstream_max_storage_file_size | Maximum size of disk storage system can use  | `10G`  |
 
 ### nats_auth_type
@@ -64,7 +64,7 @@ Token and password authentications are mutually exclusive and when `nats_auth_ty
 
 When `nats_auth_type=password` it's not required to provide `nats_users` but cluster/gateway related variables have defaults so it's authentication will be enabled.
 
-### nats_users
+### nats_users 
 
 Users can be configured for [authorization](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/authorization) and [accounts](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/accounts) with an appropriate permissions, for example:
 ```
