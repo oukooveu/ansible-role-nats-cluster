@@ -2,9 +2,11 @@
 name: molecule tests
 on:
   push:
-  pull_request:
     branches:
-      - master
+      - main
+  pull_request_review:
+    types:
+      - submitted
 jobs:
   molecule:
     runs-on: ubuntu-latest
@@ -15,9 +17,13 @@ jobs:
         os:
           - rockylinux:8
           - rockylinux:9
-          - debian:10
           - debian:11
+          - debian:12
     steps:
+      # github ubuntu images uses podman 3.4.4 which is incompatible with molecule-plugins podman driver (podman 4.x is required)
+      # next two actions are just workaround and can be removed when github podman will be updated
+      - uses: gacts/install-podman@v1
+      - run: podman version
       - uses: actions/checkout@v3
       - name: python
         uses: actions/setup-python@v4
@@ -25,6 +31,13 @@ jobs:
           python-version: '3.10'
       - name: dependencies
         run: pip3 install -r molecule/default/requirements.txt
+      # molecule's lint stage was removed: https://github.com/ansible/molecule/discussions/3825#discussioncomment-4908366
+      - name: lint
+        run: |
+          set -e
+          yamllint .
+          ansible-lint -p -v
+          flake8
       - name: molecule
         run: molecule test
         env:

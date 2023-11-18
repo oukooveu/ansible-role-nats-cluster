@@ -13,8 +13,8 @@ galaxy_info:
         - "9"
     - name: Debian
       versions:
-        - buster    # 10
-        - bullseye  # 11
+        - bullseye # 11
+        - bookworm # 12
   galaxy_tags:
     - nats
     - messaging
