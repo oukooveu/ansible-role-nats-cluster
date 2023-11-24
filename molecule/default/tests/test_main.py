@@ -21,9 +21,19 @@ def test_publish(host):
     assert "Published 11 bytes to \"PUBLIC.ALL\"" in cmd.stderr
 
 
+def test_server_status(host):
+    cmd = host.run("/usr/local/bin/nats -s nats://admin:password@localhost server check")
+    assert cmd.stdout.startswith("OK Connection OK:")
+
+
 def test_system_account(host):
     cmd = host.run("/usr/local/bin/nats -s nats://admin:password@localhost server ls --json")
     assert cmd.succeeded
+
+
+def test_jetstream_status(host):
+    cmd = host.run("/usr/local/bin/nats -s nats://a:a@localhost server check jetstream")
+    assert cmd.stdout.startswith("OK JetStream")
 
 
 def test_exporter_service(host):

@@ -51,6 +51,15 @@
     mode: "0644"
   when: nats_log_enabled|bool
 
+- name: server | configure jetstream storage dir
+  ansible.builtin.file:
+    path: "{{ nats_jetstream_storage_dir }}"
+    state: directory
+    owner: "{{ nats_user }}"
+    group: "{{ nats_group }}"
+    mode: '750'
+  when: nats_jetstream_enabled|bool
+
 - name: "server | configure nats systemd service"
   ansible.builtin.template:
     src: nats.service.j2

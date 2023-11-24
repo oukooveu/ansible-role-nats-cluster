@@ -2,6 +2,9 @@
 accounts: {
 {%   for account in __nats_accounts %}
     {{ account }}: {
+      {% if nats_jetstream_enabled|bool and account != nats_users[nats_sys_account_user].get('account') %}
+      jetstream: enabled
+      {% endif %}
       users = [
 {%     for user in __nats_users_accounts|selectattr('value.account','equalto',account)|list %}
         {

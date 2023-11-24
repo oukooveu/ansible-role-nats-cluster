@@ -48,6 +48,10 @@ There are no special requirements.
 | nats_leaf_node_port | Port where the server will listen for incoming leaf node connections | `7422` |
 | nats_leaf_node_listen_enabled | Is host listen for incoming leaf nodes connection. Mutually exclusive with `nats_leaf_node_remotes` below | `false` |
 | nats_leaf_node_remotes | Remote addresses of hosts accepting incoming leaf nodes connections. This enables leaf node if not empty. Only one endpoint for each remote cluster should be used | `[]` |
+| nats_jetstream_enabled | Enable JetStream. This option has "global" effect and JetStream will be enabled for all accounts. There is no way now to configure JetStream account's options | `false` |
+| nats_jetstream_storage_dir | Directory to use for JetStream storage |  `/var/lib/nats/jetstream` |
+| nats_jetstream_max_memory | Maximum size of the 'memory' storage | `1G` |
+| nats_jetstream_max_storage_file_size | Maximum size of the 'file' storage | `10G` |
 | nats_cli_install | Installs NATS CLI | `false` |
 | nats_cli_version | NATS CLI version | `0.0.35` |
 | nats_exporter_enabled | Installs NATS Prometheus exporter | `false` |

@@ -37,6 +37,11 @@ nats_leaf_node_port: 7422
 nats_leaf_node_listen_enabled: false
 nats_leaf_node_remotes: [] # enable leaf node if not empty
 
+nats_jetstream_enabled: false
+nats_jetstream_storage_dir: '/var/lib/nats/jetstream'
+nats_jetstream_max_memory: '1G'
+nats_jetstream_max_storage_file_size: '10G'
+
 nats_cli_enabled: false
 nats_cli_version: '0.0.35'
 

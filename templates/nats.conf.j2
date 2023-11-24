@@ -12,6 +12,14 @@ log_file: "{{ nats_log_dir }}/{{ nats_log_file }}"
 debug: {{ nats_log_debug|lower }}
 {% endif %}
 
+{% if nats_jetstream_enabled|bool %}
+jetstream {
+    store_dir: "{{ nats_jetstream_storage_dir }}"
+    max_mem: "{{ nats_jetstream_max_memory }}"
+    max_file: "{{ nats_jetstream_max_storage_file_size }}"
+}
+{% endif %}
+
 {% include 'auth.conf.j2' %}
 
 {% include 'accounts.conf.j2' %}

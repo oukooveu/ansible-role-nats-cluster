@@ -6,6 +6,7 @@
     nats_exporter_enabled: true
     nats_auth_type: 'password'
     nats_sys_account_user: 'admin'
+    nats_jetstream_enabled: true
     nats_default_permissions:
       publish:
         - "SANDBOX.*"
@@ -31,6 +32,5 @@
       b:
         account: B
         password: b
-
   roles:
     - role: oukooveu.nats_cluster
